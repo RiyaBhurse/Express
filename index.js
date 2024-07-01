@@ -92,21 +92,51 @@
 
 // // move the file to another folder
 
+// const http = require('http');
+// const server = http.createServer((req, res) => {
+//     res.setHeader('Content-Type', 'text/html');
+//     res.write('<html> <head><title> node js class </title></head> </html>');
+//     if(req.url === '/login') {
+//         res.write('<h1>Hello Login</h1>');
+//     }
+//     else res.write('<h1>Hello World</h1>');
+//     res.write('</body></html>');
+//     res.end();
+// });
+// const port = 3000;
+// const host = 'localhost';
+
+// server.listen(port, host, () => {
+//     // console.log(`Server is running on http://${host}:${port}`);
+// });
 
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
 const server = http.createServer((req, res) => {
-    res.setHeader('Content-Type', 'text/html');
-    res.write('<html> <head><title> node js class </title></head> </html>');
-    if(req.url === '/login') {
-        res.write('<h1>Hello Login</h1>');
+  // Set the Content-Type to text/html
+  res.setHeader('Content-Type', 'text/html');
+
+  // Determine the file to serve based on the URL
+    let filePath = path.join(__dirname, 'index.html');
+ 
+  // Read the file and serve it as the response
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      res.writeHead(500);
+      res.end('Error reading file');
+      return;
     }
-    else res.write('<h1>Hello World</h1>');
-    res.write('</body></html>');
+    res.writeHead(200);
+    res.write(data);
     res.end();
+  });
 });
+
 const port = 3000;
 const host = 'localhost';
 
 server.listen(port, host, () => {
-    // console.log(`Server is running on http://${host}:${port}`);
+  console.log(`Server is running on http://${host}:${port}`);
 });
